@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  aria2:
+    image: benzbrake/aria2
+    container_name: aria2
+    restart: always
+    volumes:
+      - /data/aria2:/data/aria2
+    ports:
+      - "6800:6800"
+      - "6880:6880"

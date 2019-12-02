@@ -1,0 +1,90 @@
+language: bash
+env:
+  global:
+    - MAINTAINER="Ryan Lieu<github-benzBrake@woai.ru>"
+  matrix:
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.35.0
+      BUILD_DIRECTORY=./
+      TAG_LATEST=true
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.34.0
+      BUILD_DIRECTORY=./
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.33.1
+      BUILD_DIRECTORY=./
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.32.0
+      BUILD_DIRECTORY=./
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.31.0
+      BUILD_DIRECTORY=./
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.30.0
+      BUILD_DIRECTORY=./
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.29.0
+      BUILD_DIRECTORY=./
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.28.0
+      BUILD_DIRECTORY=./
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.27.1
+      BUILD_DIRECTORY=./
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.26.1
+      BUILD_DIRECTORY=./
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.26.0
+      BUILD_DIRECTORY=./
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.25.0
+      BUILD_DIRECTORY=./
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.24.0
+      BUILD_DIRECTORY=./
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.23.0
+      BUILD_DIRECTORY=./
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.22.0
+      BUILD_DIRECTORY=./
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.21.0
+      BUILD_DIRECTORY=./
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.20.0_2
+      BUILD_DIRECTORY=./
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.20.0
+      BUILD_DIRECTORY=./
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.19.3
+      BUILD_DIRECTORY=./
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.19.2_2
+      BUILD_DIRECTORY=./
+    - DOCKER_REPO=benzbrake/aria2
+      DOCKER_TAG=v1.19.2
+      BUILD_DIRECTORY=./
+
+sudo: required
+  
+services:
+  - docker
+
+before_script:
+  - chmod +x ./hooks/*.sh
+
+script:
+  - if [[ -z ${DOCKER_USERNAME} ]]; then exit 1; fi
+  - if [[ -z ${BUILD_DIRECTORY} ]]; then exit 1; fi
+  - if [[ -z ${DOCKER_REPO} ]]; then export DOCKER_REPO="${DOCKER_USERNAME}/${BUILD_DIRECTORY}"; fi
+  - ./hooks/build.sh
+
+after_success:
+  - ./hooks/list.sh
+  - if [[ "$TRAVIS_BRANCH" = "master" ]]; then ./hooks/upload.sh ; fi
+
+notifications:
+  email: false
